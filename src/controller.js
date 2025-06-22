@@ -3,7 +3,7 @@ const fastCsv = require('fast-csv');
 const Records = require('./records.model');
 const { mapRow } = require('./helpers/mapRow');
 
-const BATCH_SIZE = 1000;    // Tamaño del batch para bulkWrite. 1000 registros.
+const BATCH_LIMIT = 1000;    // Tamaño del batch para bulkWrite. 1000 registros.
 
 const upload = async (req, res) => {
 
@@ -42,7 +42,7 @@ const upload = async (req, res) => {
             });
 
             // Si el batch alcanzo el tamaño definido, lo insertamos en la DB.
-            if (batchRegisters.length >= BATCH_SIZE) {
+            if (batchRegisters.length >= BATCH_LIMIT) {
                 await Records.collection.bulkWrite(batchRegisters, { ordered: false });
                 batchRegisters.length = 0;
             }
